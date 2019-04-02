@@ -1,0 +1,8 @@
+Package: POL3085
+Title: Automates linear regression model plotting
+Version: 0.1
+Authors@R: person("Logan", "Stundal", email = "stund005@umn.edu",
+                  role = c("aut", "cre"))
+Description: Provides two functions that automate plotting confidence intervals and effects from you linear regression outputs in R for your posters or final papers in POL 3085.
+LazyData: true
+RoxygenNote: 6.1.1
