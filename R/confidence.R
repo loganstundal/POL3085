@@ -15,11 +15,11 @@
 #' @param mai Change plot margins (inches).
 #' @param ps Change text size in plot. This will be useful for your posters
 #' (30 would be good for a poster, 12 for a paper).
-#' @param pt.type Point style of regression parameter point estimate. Default is 19, circle. See ?points
+#' @param pt.type Point style of regression parameter point estimate. Default is 16, circle. See ?points
 #' for information on different styles.
-#' @param pt.size Side of point estimate, default is 2.
-#' @param pt.color Color of point estimate, default is 'red', Any color argument will work here.
-#' @param lwd Line width for confidence intervals, default is 2.
+#' @param pt.size Side of point estimate, default is 1.
+#' @param pt.color Color of point estimate, default is 'black', Any color argument will work here.
+#' @param lwd Line width for confidence intervals, default is 1.
 #' @param lty Line type for confidence intervals, default is 2 (dashed line). See the lty argument
 #' in ?par for additional details on line types.
 #'
@@ -50,8 +50,8 @@
 
 confidence <- function(model,vars=NULL,var.labels = NULL, level=0.95,grid=T,grid.int=5,
                        mai=NULL,ps=12,
-                       pt.type=19,pt.size=2,pt.color='red',
-                       lwd=2,lty=2,
+                       pt.type=16,pt.size=1,pt.color='black',
+                       lwd=1,lty=2,
                        legend=F){
 
 
@@ -75,7 +75,7 @@ confidence <- function(model,vars=NULL,var.labels = NULL, level=0.95,grid=T,grid
   a <- (1 - level)/2
   a <- c(a,1-a)
 
-  crit <- qt(a, m$df.residual)
+  crit <- qt(a, model$df.residual)
 
   coefs <- data.frame('Var'   = rownames(res),
                       'b'     = res[,1],

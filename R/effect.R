@@ -13,13 +13,18 @@
 #'
 #' @param x.label Option to change x-axis label in plot
 #' @param y.label Option to change y-axis label in plot
+#' @param plot.title Option to add title to plot
 #'
 #' @param grid Option to plot with grid lines, default is FALSE
 #'
 #' @param rug Option to plot with rug to represent data density in plot, default is FALSE
 #'
-#' @param color TO FINISH -- option to change polygon colors
-#' @param line.width TO FINISH -- option to change fit regression line thickness
+#' @param ci.color Color for confidence interval polygons, default is 'lightgray'.
+#' @param line.width Option to change fit regression line thickness, default is 1.
+#' @param pt.color Point color for average estimated effect of dummy independent variable, default is 'black'.
+#' @param pt.size  Point size for average estimated effect of dummy independent variable, default is 1.
+#' @param pt.type Point style of regression parameter point estimate. Default is 16, circle. See ?points
+#' for information on different styles.
 #' @param title TO FINISH -- option to add plot title
 #'
 #'
@@ -42,7 +47,10 @@
 
 effect <- function(model,var,level=0.95,dummyIV=F,
                    x.label=NULL,y.label=NULL,title=NULL,
-                   grid=F,rug=F) {
+                   grid=F,rug=F,ci.color='lightgray',
+                   line.width=1,line.color='black',
+                   pt.color='black',pt.size=1,pt.type=16,
+                   plot.title=NULL) {
 
   # Model values
   b <- model$coefficients
@@ -104,10 +112,10 @@ effect <- function(model,var,level=0.95,dummyIV=F,
     if(rug==T)  rug(x)
 
     # Add confidence intervals
-    with(d,polygon(c(x,rev(x)),c(y.lci,rev(y.uci)),col="lightgray",border=NA))
+    with(d,polygon(c(x,rev(x)),c(y.lci,rev(y.uci)),col=ci.color,border=NA))
 
     # Add predicted values line
-    with(d,lines(x,y.fit))
+    with(d,lines(x,y.fit,lwd=line.width,col=line.color))
   }
 
   else{
@@ -125,19 +133,23 @@ effect <- function(model,var,level=0.95,dummyIV=F,
 
     with(d,segments(x0=x,y0=y.lci,
                     x1=x,y1=y.uci,
-                    lty=1,lwd=2))
+                    lty=1,lwd=line.width))
 
     with(d,segments(x0=x-0.05,y0=y.lci,
                     x1=x+0.05,y1=y.lci,
-                    lty=1,lwd=2))
+                    lty=1,lwd=line.width))
 
     with(d,segments(x0=x-0.05,y0=y.uci,
                     x1=x+0.05,y1=y.uci,
-                    lty=1,lwd=2))
+                    lty=1,lwd=line.width))
 
-    with(d,points(x=x,y=y.fit,pch=19,col='red',cex=2))
+    with(d,points(x=x,y=y.fit,pch=pt.type,col=pt.color,cex=pt.size))
 
   }
+
+  # Add title if desires
+  if(!is.null(plot.title)){title(plot.title)}
+
 }
 
 

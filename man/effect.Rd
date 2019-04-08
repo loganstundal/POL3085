@@ -5,7 +5,9 @@
 \title{Plot effect for one variable from your linear regression model output}
 \usage{
 effect(model, var, level = 0.95, dummyIV = F, x.label = NULL,
-  y.label = NULL, title = NULL, grid = F, rug = F)
+  y.label = NULL, title = NULL, grid = F, rug = F,
+  ci.color = "lightgray", line.width = 1, line.color = "black",
+  pt.color = "red", pt.size = 1.5, pt.type = 16, plot.title = NULL)
 }
 \arguments{
 \item{model}{The object name of your linear regression model. Example - if you run the
@@ -27,9 +29,18 @@ following command: model1 <- lm(y~x), then enter 'model1' for this argument.}
 
 \item{rug}{Option to plot with rug to represent data density in plot, default is FALSE}
 
-\item{color}{TO FINISH -- option to change polygon colors}
+\item{ci.color}{Color for confidence interval polygons, default is 'lightgray'.}
 
-\item{line.width}{TO FINISH -- option to change fit regression line thickness}
+\item{line.width}{Option to change fit regression line thickness, default is 1.}
+
+\item{pt.color}{Point color for average estimated effect of dummy independent variable, default is 'red'.}
+
+\item{pt.size}{Point size for average estimated effect of dummy independent variable, default is 1.5.}
+
+\item{pt.type}{Point style of regression parameter point estimate. Default is 16, circle. See ?points
+for information on different styles.}
+
+\item{plot.title}{Option to add title to plot}
 }
 \description{
 This function takes the linear regression model you estimate with lm() for your final
