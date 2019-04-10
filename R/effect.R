@@ -9,7 +9,7 @@
 #'
 #' @param level Confidence level, .95 is the default.
 #'
-#' @param dummyIV Indicator for whether the plotted IV is a dummy variable, default is FALSE
+#' @param categoricalIV Indicator for whether the plotted IV is a dummy variable, default is FALSE
 #'
 #' @param x.label Option to change x-axis label in plot
 #' @param y.label Option to change y-axis label in plot
@@ -25,8 +25,12 @@
 #' @param pt.size  Point size for average estimated effect of dummy independent variable, default is 1.
 #' @param pt.type Point style of regression parameter point estimate. Default is 16, circle. See ?points
 #' for information on different styles.
-#' @param title TO FINISH -- option to add plot title
+#' @param plot.title Optional plot title.
+#' @param x.value.labels Optional list of character names (must match length of categories)
 #'
+#' @param connect For categorical IV plots, add connecting line between points.
+#' @param connect.lwd Optional line width argument for connecting line in categorical IV plots.
+#' @param connect.col Optional line color option for connecting line in categorical IV plots.
 #'
 #' @examples
 #' # Estimate a regression using 'mtcars' data:
@@ -35,22 +39,23 @@
 #' # Plot effect of 'wt' variable
 #' effect(m,'wt')
 #'
-#' # Plot effect of dummy variable, 'am'
-#' effect(m,'am',dummyIV=TRUE)
+#' # Plot effect of dummy variable, 'am' with custom labels
+#' effect(m,'am',categoricalIV=TRUE,x.value.labels=c('Automatic','Manual'))
 #'
 #' # Plot with user-defined x-axis label
 #' effect(m,'wt',x.label='Vehicle Weight')
 #'
 #' # Plot with grid lines and rug
-#' effect(m,'wt',x.label='Vehicle Weight', grid=TRUE,rug=TRUE)
+#' effect(m,'wt',x.label='Vehicle Weight',grid=TRUE,rug=TRUE)
 
 
-effect <- function(model,var,level=0.95,dummyIV=F,
+effect <- function(model,var,level=0.95,categoricalIV=F,
                    x.label=NULL,y.label=NULL,title=NULL,
                    grid=F,rug=F,ci.color='lightgray',
                    line.width=1,line.color='black',
                    pt.color='black',pt.size=1,pt.type=16,
-                   plot.title=NULL) {
+                   plot.title=NULL,x.value.labels=NULL,
+                   connect=FALSE,connect.lwd=1,connect.col='black') {
 
   # Model values
   b <- model$coefficients
@@ -98,14 +103,16 @@ effect <- function(model,var,level=0.95,dummyIV=F,
   # PLOT ############################################################
 
   # Set up plot environment
+  plot.x.lab <- ifelse(!is.null(x.label),x.label,'IV')
 
-  if(dummyIV==F){
+  if(categoricalIV==F){
+
     with(d,plot(x='',y='',
                 xlim=c(min(x),max(x)),
                 ylim=c(min(y.lci),max(y.uci)),
-                xlab=ifelse(!is.null(x.label),x.label,'IV'),
+                xlab=plot.x.lab,
                 ylab=ifelse(!is.null(y.label),y.label,'DV'),
-                main=ifelse(!is.null(title),title,''),
+                main=ifelse(!is.null(plot.title),plot.title,''),
                 yaxt='n'))
     axis(2,las=1)
     if(grid==T) grid()
@@ -116,40 +123,50 @@ effect <- function(model,var,level=0.95,dummyIV=F,
 
     # Add predicted values line
     with(d,lines(x,y.fit,lwd=line.width,col=line.color))
+
   }
 
   else{
     d <- unique(d)
 
     with(d, plot(x='',y='',
-                 xlim=c(-0.5,1.5),
+                 xlim=c(head(unique(d$x),n=1)-0.25,tail(unique(d$x),n=1)+0.25),
                  ylim=c(min(y.lci),max(y.uci)),
-                 xlab=ifelse(!is.null(x.label),x.label,'IV'),
+                 xlab=plot.x.lab <- ifelse(!is.null(x.label),x.label,'IV'),
                  ylab=ifelse(!is.null(y.label),y.label,'DV'),
                  xaxt='n',yaxt='n'))
-    axis(1,at=c(0,1));axis(2,las=1)
+    axis(1,
+         at     = unique(d$x),
+         labels = unlist(ifelse(!is.null(x.value.labels),
+                                list(x.value.labels),
+                                list(as.character(unique(d$x))))))
 
-    if(grid==T) grid()
+    axis(2,las=1)
+
+    if(grid==T) grid(NA,NULL)
 
     with(d,segments(x0=x,y0=y.lci,
                     x1=x,y1=y.uci,
                     lty=1,lwd=line.width))
 
-    with(d,segments(x0=x-0.05,y0=y.lci,
-                    x1=x+0.05,y1=y.lci,
+    with(d,segments(x0=x-0.025,y0=y.lci,
+                    x1=x+0.025,y1=y.lci,
                     lty=1,lwd=line.width))
 
-    with(d,segments(x0=x-0.05,y0=y.uci,
-                    x1=x+0.05,y1=y.uci,
+    with(d,segments(x0=x-0.025,y0=y.uci,
+                    x1=x+0.025,y1=y.uci,
                     lty=1,lwd=line.width))
 
     with(d,points(x=x,y=y.fit,pch=pt.type,col=pt.color,cex=pt.size))
 
+    if(connect==T) lines(d$x,d$y.fit,lty=2,lwd=connect.lwd,col=connect.col)
   }
 
-  # Add title if desires
+  # Add title if desired
   if(!is.null(plot.title)){title(plot.title)}
 
 }
 
+
+# Adjust plotting options for categorical IVs. Add options to facilitate plotting categorical IVs such as: connection lines and custom label options for category values.
 
