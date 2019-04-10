@@ -166,7 +166,3 @@ effect <- function(model,var,level=0.95,categoricalIV=F,
   if(!is.null(plot.title)){title(plot.title)}
 
 }
-
-
-# Adjust plotting options for categorical IVs. Add options to facilitate plotting categorical IVs such as: connection lines and custom label options for category values.
-

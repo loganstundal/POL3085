@@ -157,5 +157,3 @@ confidence <- function(model,vars=NULL,var.labels = NULL, level=0.95,grid=T,grid
            col=c(pt.color,'black'),xpd=T)}
 
 }
-
-###################################################################################################

@@ -6,8 +6,7 @@
 \usage{
 confidence(model, vars = NULL, var.labels = NULL, level = 0.95,
   grid = T, grid.int = 5, mai = NULL, ps = 12, pt.type = 16,
-  pt.size = 1.5, pt.color = "red", lwd = 1.5, lty = 2,
-  legend = F)
+  pt.size = 1, pt.color = "black", lwd = 1, lty = 2, legend = F)
 }
 \arguments{
 \item{model}{Model takes the object name of your linear regression model. Example - if you run the
@@ -29,11 +28,11 @@ enter four names. See example code below.}
 \item{pt.type}{Point style of regression parameter point estimate. Default is 16, circle. See ?points
 for information on different styles.}
 
-\item{pt.size}{Side of point estimate, default is 1.5.}
+\item{pt.size}{Side of point estimate, default is 1.}
 
-\item{pt.color}{Color of point estimate, default is 'red', Any color argument will work here.}
+\item{pt.color}{Color of point estimate, default is 'black', Any color argument will work here.}
 
-\item{lwd}{Line width for confidence intervals, default is 1.5.}
+\item{lwd}{Line width for confidence intervals, default is 1.}
 
 \item{lty}{Line type for confidence intervals, default is 2 (dashed line). See the lty argument
 in ?par for additional details on line types.}
